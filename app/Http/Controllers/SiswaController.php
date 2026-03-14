@@ -22,6 +22,11 @@ class SiswaController extends Controller
         return view('siswa.create');
     }
 
+    public function show(Siswa $siswa)
+    {
+        return view('siswa.show', compact('siswa'));
+    }
+
     public function store(Request $request)
     {
         if (auth()->user()->role !== 'admin') {

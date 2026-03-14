@@ -22,6 +22,11 @@ class GuruController extends Controller
         return view('guru.create');
     }
 
+    public function show(Guru $guru)
+    {
+        return view('guru.show', compact('guru'));
+    }
+
     public function store(Request $request)
     {
         if (auth()->user()->role !== 'admin') {

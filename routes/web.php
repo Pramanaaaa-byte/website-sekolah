@@ -8,17 +8,58 @@ use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PiketController;
 use App\Http\Controllers\IzinKeluarController;
 use App\Http\Controllers\KeterlambatanController;
+use App\Http\Controllers\PelanggaranController;
+use App\Http\Controllers\JadwalPiketController;
+use App\Http\Controllers\QRScannerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+// Simple test routes without authentication
+Route::get('/simple-test', function() {
+    return 'Simple test works!';
+});
+
+Route::get('/session-check', function() {
+    if (session()->has('user')) {
+        return 'Session exists: ' . session('user')['name'];
+    } else {
+        return 'No session found';
+    }
+});
+
+Route::get('/auth-check', function() {
+    if (auth()->check()) {
+        return 'Authenticated as: ' . auth()->user()->name . ' (Role: ' . auth()->user()->role . ')';
+    } else {
+        return 'Not authenticated';
+    }
+});
+
+Route::get('/siswa-test', function() {
+    return view('siswa.create');
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Test Route
+    Route::get('/test-route', function() {
+        return 'Route test successful';
+    })->name('test.route');
+    
+    // Middleware Test
+    Route::get('/middleware-test', function() {
+        return 'Middleware test successful';
+    })->middleware('role:admin');
+    
+    // Middleware Test with Siswa Controller
+    Route::get('/middleware-siswa', [SiswaController::class, 'create'])->middleware('role:admin');
+    
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    // Master Data - Only admin can create, edit, delete
+    // Master Data - Admin can create, edit, delete; others can read
     Route::resource('siswa', SiswaController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
     Route::get('siswa/create', [SiswaController::class, 'create'])->middleware('role:admin')->name('siswa.create');
     Route::post('siswa', [SiswaController::class, 'store'])->middleware('role:admin')->name('siswa.store');
@@ -27,11 +68,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('siswa/{siswa}', [SiswaController::class, 'destroy'])->middleware('role:admin')->name('siswa.destroy');
     
     Route::resource('guru', GuruController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
-    Route::get('guru/create', [GuruController::class, 'create'])->middleware('role:admin')->name('guru.create');
-    Route::post('guru', [GuruController::class, 'store'])->middleware('role:admin')->name('guru.store');
-    Route::get('guru/{guru}/edit', [GuruController::class, 'edit'])->middleware('role:admin')->name('guru.edit');
-    Route::put('guru/{guru}', [GuruController::class, 'update'])->middleware('role:admin')->name('guru.update');
-    Route::delete('guru/{guru}', [GuruController::class, 'destroy'])->middleware('role:admin')->name('guru.destroy');
+    Route::get('guru/create', [GuruController::class, 'create'])->middleware('role:admin,guru')->name('guru.create');
+    Route::post('guru', [GuruController::class, 'store'])->middleware('role:admin,guru')->name('guru.store');
+    Route::get('guru/{guru}/edit', [GuruController::class, 'edit'])->middleware('role:admin,guru')->name('guru.edit');
+    Route::put('guru/{guru}', [GuruController::class, 'update'])->middleware('role:admin,guru')->name('guru.update');
+    Route::delete('guru/{guru}', [GuruController::class, 'destroy'])->middleware('role:admin,guru')->name('guru.destroy');
     
     // Transaksi - Only admin can create, edit, delete
     Route::resource('piket', PiketController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
@@ -54,7 +95,45 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('keterlambatan/{keterlambatan}/edit', [KeterlambatanController::class, 'edit'])->middleware('role:admin')->name('keterlambatan.edit');
     Route::put('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'update'])->middleware('role:admin')->name('keterlambatan.update');
     Route::delete('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'destroy'])->middleware('role:admin')->name('keterlambatan.destroy');
+    
+    // Pelanggaran - Admin can manage, others can read
+    Route::resource('pelanggaran', PelanggaranController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::get('pelanggaran/create', [PelanggaranController::class, 'create'])->middleware('role:admin')->name('pelanggaran.create');
+    Route::post('pelanggaran', [PelanggaranController::class, 'store'])->middleware('role:admin')->name('pelanggaran.store');
+    Route::get('pelanggaran/{pelanggaran}/edit', [PelanggaranController::class, 'edit'])->middleware('role:admin')->name('pelanggaran.edit');
+    Route::put('pelanggaran/{pelanggaran}', [PelanggaranController::class, 'update'])->middleware('role:admin')->name('pelanggaran.update');
+    Route::delete('pelanggaran/{pelanggaran}', [PelanggaranController::class, 'destroy'])->middleware('role:admin')->name('pelanggaran.destroy');
+    Route::get('pelanggaran/rekap', [PelanggaranController::class, 'rekap'])->name('pelanggaran.rekap');
+    
+    // Jadwal Piket - Admin and Guru can manage, others can read
+    Route::resource('jadwal-piket', JadwalPiketController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::get('jadwal-piket/create', [JadwalPiketController::class, 'create'])->middleware('role:admin,guru')->name('jadwal-piket.create');
+    Route::post('jadwal-piket', [JadwalPiketController::class, 'store'])->middleware('role:admin,guru')->name('jadwal-piket.store');
+    Route::get('jadwal-piket/{jadwalPiket}/edit', [JadwalPiketController::class, 'edit'])->middleware('role:admin,guru')->name('jadwal-piket.edit');
+    Route::put('jadwal-piket/{jadwalPiket}', [JadwalPiketController::class, 'update'])->middleware('role:admin,guru')->name('jadwal-piket.update');
+    Route::delete('jadwal-piket/{jadwalPiket}', [JadwalPiketController::class, 'destroy'])->middleware('role:admin,guru')->name('jadwal-piket.destroy');
+    Route::get('jadwal-piket/hari-ini', [JadwalPiketController::class, 'getJadwalHariIni'])->name('jadwal-piket.hari-ini');
+    
+    // QR Scanner - Only admin and guru can use
+    Route::post('/api/qr-scan', [QRScannerController::class, 'scan'])->middleware('role:admin,guru')->name('qr.scan');
+    Route::get('/api/qr-generate/{siswa}', [QRScannerController::class, 'generateQr'])->middleware('role:admin,guru')->name('qr.generate');
+    
+    // Authentication routes
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [AuthenticatedSessionController::class, 'create'])
+                    ->name('login');
+        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    });
+
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+                ->name('logout');
+
 });
+
+// Add GET route for logout (outside auth middleware)
+Route::get('logout', function() {
+    return redirect()->route('login')->with('message', 'Please use the logout button in the sidebar.');
+})->name('logout.get');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

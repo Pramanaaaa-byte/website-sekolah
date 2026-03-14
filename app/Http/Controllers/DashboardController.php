@@ -16,16 +16,15 @@ class DashboardController extends Controller
     {
         $totalSiswa = Siswa::count();
         $totalGuru = Guru::count();
-        $piketHariIni = Piket::whereDate('tanggal', today())->with('guru')->get();
-        $izinPending = IzinKeluar::where('status', 'pending')->count();
-        $keterlambatanHariIni = Keterlambatan::whereDate('waktu_datang', today())->count();
+        $totalPiket = Piket::count();
+        $totalKeterlambatan = Keterlambatan::count();
         
         $recentIzin = IzinKeluar::with(['siswa', 'guru'])
             ->latest()
             ->take(5)
             ->get();
             
-        $recentTelat = Keterlambatan::with(['siswa', 'guru'])
+        $recentKeterlambatan = Keterlambatan::with(['siswa', 'guru'])
             ->latest()
             ->take(5)
             ->get();
@@ -33,11 +32,10 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'totalSiswa', 
             'totalGuru', 
-            'piketHariIni', 
-            'izinPending',
-            'keterlambatanHariIni',
+            'totalPiket',
+            'totalKeterlambatan',
             'recentIzin',
-            'recentTelat'
+            'recentKeterlambatan'
         ));
     }
 }

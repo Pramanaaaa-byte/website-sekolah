@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Siswa extends Model
 {
@@ -16,16 +17,46 @@ class Siswa extends Model
     protected $fillable = [
         'nis',
         'nama',
-        'kelas'
+        'kelas',
+        'jurusan',
+        'jenis_kelamin',
+        'qr_code',
+        'qr_code_data'
     ];
 
-    public function izinKeluar()
+    protected $casts = [
+        'qr_code_data' => 'array',
+    ];
+
+    public function izinKeluar(): HasMany
     {
         return $this->hasMany(IzinKeluar::class, 'id_siswa');
     }
 
-    public function keterlambatan()
+    public function keterlambatan(): HasMany
     {
         return $this->hasMany(Keterlambatan::class, 'id_siswa');
+    }
+
+    public function pelanggaran(): HasMany
+    {
+        return $this->hasMany(Pelanggaran::class, 'id_siswa');
+    }
+
+    public function getTotalPoinAttribute(): int
+    {
+        return $this->pelanggaran()->sum('poin');
+    }
+
+    public function generateQrCode(): string
+    {
+        $data = [
+            'nis' => $this->nis,
+            'nama' => $this->nama,
+            'kelas' => $this->kelas,
+            'jurusan' => $this->jurusan,
+        ];
+
+        return base64_encode(json_encode($data));
     }
 }
