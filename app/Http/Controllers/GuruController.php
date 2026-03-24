@@ -16,9 +16,6 @@ class GuruController extends Controller
 
     public function create()
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         return view('guru.create');
     }
 
@@ -29,9 +26,6 @@ class GuruController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $request->validate([
             'nama' => 'required|max:100',
             'jabatan' => 'required|max:50'
