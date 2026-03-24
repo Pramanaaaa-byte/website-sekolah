@@ -501,6 +501,82 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* WhatsApp Card Styles */
+        .whatsapp-card {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .whatsapp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-card .card-body {
+            padding: 2rem;
+        }
+
+        .whatsapp-card .card-title {
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .whatsapp-card .card-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .whatsapp-card .text-end p {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .whatsapp-card .btn-success {
+            background: white;
+            color: #25d366;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .whatsapp-card .btn-success:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+            color: #128c7e;
+        }
+
+        .whatsapp-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .whatsapp-icon i {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
     <!-- CSRF Meta Tag -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -519,10 +595,10 @@
                         </button>
                         
                         <!-- Brand -->
-                        <a href="/" class="brand text-decoration-none d-flex align-items-center">
+                        <div class="brand text-decoration-none d-flex align-items-center">
                             <i class="fas fa-home me-2 text-white" style="font-size: 1.5rem;"></i>
-                            <h4 class="mb-0 text-white" style="font-weight: 700;">Selamat Datang</h4>
-                        </a>
+                            <h4 class="mb-0 text-white" style="font-weight: 700;">SELAMAT DATANG</h4>
+                        </div>
                     </div>
                 </div>
                 
@@ -548,23 +624,17 @@
                         <i class="fas fa-chart-line"></i> Dashboard
                     </a>
                     
-                    <div class="mt-3 mb-2 text-white-50 small">DATA MASTER</div>
+                    <div class="mt-3 mb-2 text-white-50 small">DATA SISWA & GURU</div>
                     
                     <a href="{{ route('siswa.index') }}" class="nav-link {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
                         <i class="fas fa-users"></i> Siswa
                     </a>
                     
-                    @if(auth()->user()->role === 'admin')
-                        <a href="{{ route('siswa.create') }}" class="nav-link {{ request()->routeIs('siswa.create') ? 'active' : '' }}">
-                            <i class="fas fa-plus"></i> Tambah Siswa
-                        </a>
-                    @endif
-                    
                     <a href="{{ route('guru.index') }}" class="nav-link {{ request()->routeIs('guru.*') ? 'active' : '' }}">
                         <i class="fas fa-chalkboard-teacher"></i> Guru
                     </a>
                     
-                    <div class="mt-3 mb-2 text-white-50 small">TRANSAKSI</div>
+                    <div class="mt-3 mb-2 text-white-50 small">JADWAL & PRESENSI</div>
                     
                     <a href="{{ route('piket.index') }}" class="nav-link {{ request()->routeIs('piket.*') ? 'active' : '' }}">
                         <i class="fas fa-calendar-check"></i> Jadwal Piket
@@ -578,17 +648,11 @@
                         <i class="fas fa-clock"></i> Keterlambatan
                     </a>
                     
-                    <div class="mt-3 mb-2 text-white-50 small">PELAJARAN</div>
+                    <div class="mt-3 mb-2 text-white-50 small">PELANGGARAN</div>
                     
                     <a href="{{ route('pelanggaran.index') }}" class="nav-link {{ request()->routeIs('pelanggaran.*') ? 'active' : '' }}">
                         <i class="fas fa-exclamation-triangle"></i> Pelanggaran
                     </a>
-                    
-                    @if(auth()->user()->role === 'admin')
-                        <a href="{{ route('pelanggaran.create') }}" class="nav-link {{ request()->routeIs('pelanggaran.create') ? 'active' : '' }}">
-                            <i class="fas fa-plus"></i> Tambah Pelanggaran
-                        </a>
-                    @endif
                     
                     <a href="{{ route('pelanggaran.rekap') }}" class="nav-link {{ request()->routeIs('pelanggaran.rekap') ? 'active' : '' }}">
                         <i class="fas fa-chart-bar"></i> Rekap Pelanggaran
@@ -598,10 +662,6 @@
                     
                     <a href="{{ route('jadwal-piket.index') }}" class="nav-link {{ request()->routeIs('jadwal-piket.*') ? 'active' : '' }}">
                         <i class="fas fa-calendar-alt"></i> Jadwal Piket
-                    </a>
-                    
-                    <a href="{{ route('jadwal-piket.hari-ini') }}" class="nav-link {{ request()->routeIs('jadwal-piket.hari-ini') ? 'active' : '' }}">
-                        <i class="fas fa-today"></i> Piket Hari Ini
                     </a>
                     
                     <div class="mt-3 mb-2 text-white-50 small">TOOLS</div>

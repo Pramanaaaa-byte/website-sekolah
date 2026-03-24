@@ -4,7 +4,7 @@
 <div class="py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 style="color: var(--primary-color);">Izin Keluar Siswa</h2>
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
             <a href="{{ route('izin-keluar.create') }}" class="btn btn-primary">
                 + Ajukan Izin
             </a>
@@ -48,7 +48,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if(auth()->user()->role === 'admin')
+                                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
                                         <a href="{{ route('izin-keluar.edit', $i) }}" class="btn btn-sm btn-outline-primary">
                                             Edit
                                         </a>

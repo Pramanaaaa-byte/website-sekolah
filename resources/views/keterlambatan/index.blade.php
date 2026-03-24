@@ -4,7 +4,7 @@
 <div class="py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 style="color: var(--primary-color);">Data Keterlambatan</h2>
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
             <a href="{{ route('keterlambatan.create') }}" class="btn btn-primary">
                 + Catat Keterlambatan
             </a>
@@ -34,7 +34,7 @@
                                 <td>{{ $k->waktu_datang->format('d/m/Y H:i') }}</td>
                                 <td>{{ $k->keterangan ?? '-' }}</td>
                                 <td>
-                                    @if(auth()->user()->role === 'admin')
+                                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
                                         <a href="{{ route('keterlambatan.edit', $k) }}" class="btn btn-sm btn-outline-primary">
                                             Edit
                                         </a>

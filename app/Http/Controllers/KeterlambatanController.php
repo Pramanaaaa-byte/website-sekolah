@@ -18,9 +18,6 @@ class KeterlambatanController extends Controller
 
     public function create()
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $siswa = Siswa::all();
         $guru = Guru::all();
         return view('keterlambatan.create', compact('siswa', 'guru'));
@@ -28,9 +25,6 @@ class KeterlambatanController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $request->validate([
             'id_siswa' => 'required|exists:siswa,id_siswa',
             'id_guru' => 'required|exists:guru,id_guru',
@@ -46,9 +40,6 @@ class KeterlambatanController extends Controller
 
     public function edit(Keterlambatan $keterlambatan)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $siswa = Siswa::all();
         $guru = Guru::all();
         return view('keterlambatan.edit', compact('keterlambatan', 'siswa', 'guru'));
@@ -56,9 +47,6 @@ class KeterlambatanController extends Controller
 
     public function update(Request $request, Keterlambatan $keterlambatan)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $request->validate([
             'keterangan' => 'nullable'
         ]);
@@ -69,11 +57,14 @@ class KeterlambatanController extends Controller
             ->with('success', 'Data keterlambatan berhasil diperbarui.');
     }
 
+    public function show(Keterlambatan $keterlambatan)
+    {
+        $keterlambatan->load(['siswa', 'guru']);
+        return view('keterlambatan.show', compact('keterlambatan'));
+    }
+
     public function destroy(Keterlambatan $keterlambatan)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $keterlambatan->delete();
 
         return redirect()->route('keterlambatan.index')

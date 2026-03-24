@@ -65,6 +65,12 @@ class PiketController extends Controller
             ->with('success', 'Jadwal piket berhasil diperbarui.');
     }
 
+    public function show(Piket $piket)
+    {
+        $piket->load('guru');
+        return view('piket.show', compact('piket'));
+    }
+
     public function destroy(Piket $piket)
     {
         if (auth()->user()->role !== 'admin') {

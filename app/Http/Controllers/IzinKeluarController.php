@@ -18,9 +18,6 @@ class IzinKeluarController extends Controller
 
     public function create()
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $siswa = Siswa::all();
         $guru = Guru::all();
         return view('izin-keluar.create', compact('siswa', 'guru'));
@@ -28,9 +25,6 @@ class IzinKeluarController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $request->validate([
             'id_siswa' => 'required|exists:siswa,id_siswa',
             'id_guru' => 'required|exists:guru,id_guru',
@@ -46,9 +40,6 @@ class IzinKeluarController extends Controller
 
     public function edit(IzinKeluar $izinKeluar)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $siswa = Siswa::all();
         $guru = Guru::all();
         return view('izin-keluar.edit', compact('izinKeluar', 'siswa', 'guru'));
@@ -56,9 +47,6 @@ class IzinKeluarController extends Controller
 
     public function update(Request $request, IzinKeluar $izinKeluar)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $request->validate([
             'status' => 'required|in:pending,approved,rejected,completed',
             'waktu_kembali' => 'nullable|date'
@@ -70,11 +58,14 @@ class IzinKeluarController extends Controller
             ->with('success', 'Data izin keluar berhasil diperbarui.');
     }
 
+    public function show(IzinKeluar $izinKeluar)
+    {
+        $izinKeluar->load(['siswa', 'guru']);
+        return view('izin-keluar.show', compact('izinKeluar'));
+    }
+
     public function destroy(IzinKeluar $izinKeluar)
     {
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized access');
-        }
         $izinKeluar->delete();
 
         return redirect()->route('izin-keluar.index')

@@ -71,6 +71,33 @@
             </div>
         </div>
         
+        <!-- WhatsApp Contact Card -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card whatsapp-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="whatsapp-icon me-3">
+                                    <i class="fab fa-whatsapp fa-2x text-success"></i>
+                                </div>
+                                <div>
+                                    <h5 class="card-title mb-1">Hubungi Admin</h5>
+                                    <p class="card-text text-muted mb-0">Butuh bantuan? Hubungi kami via WhatsApp</p>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <p class="mb-2"><strong>No. WhatsApp:</strong></p>
+                                <a href="https://wa.me/628123456789" target="_blank" class="btn btn-success btn-lg">
+                                    <i class="fab fa-whatsapp me-2"></i>+62 812-3456-789
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Recent Activities -->
         <div class="row">
             <div class="col-md-6">
