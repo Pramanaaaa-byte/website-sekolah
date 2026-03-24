@@ -129,7 +129,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Temporary routes for testing (bypass middleware)
-require __DIR__.'/temp_routes.php';
-
 require __DIR__.'/auth.php';
