@@ -1,35 +1,44 @@
-# Website Sekolah - EduSpace
+# 🎓 EduSpace – Website Manajemen Sekolah
 
-Project ini adalah aplikasi manajemen sekolah berbasis Laravel yang memiliki fitur:
+![Laravel](https://img.shields.io/badge/Laravel-12-red)
+![PHP](https://img.shields.io/badge/PHP-8.2-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-- Manajemen Data Siswa
-- Manajemen Data Guru
-- Piket
-- Izin Keluar
-- Keterlambatan
-- Login Multi Role
+EduSpace adalah aplikasi berbasis web yang dibangun menggunakan **Laravel** untuk membantu pengelolaan data sekolah secara digital, terstruktur, dan efisien.
 
 ---
 
-## Cara Menjalankan Project
+## 🚀 Fitur Utama
 
-1. Install dependency
-composer install
+### 📚 Manajemen Data
+- CRUD Data Siswa
+- CRUD Data Guru
+- Relasi database
 
-2. Copy file env
-cp .env.example .env
+### 📋 Aktivitas Sekolah
+- Piket Harian
+- Izin Keluar
+- Keterlambatan
+- Rekap Pelanggaran
 
-3. Generate application key
-php artisan key:generate
+### 🔐 Sistem Autentikasi
+- Login Multi Role (Admin & Guru)
+- Middleware Role-Based Access
 
-4. Migrasi database
-php artisan migrate
+### ⚙️ Sistem Tambahan
+- Dashboard
+- Validasi Form
+- Session Login
 
-5. Install frontend dependency
-npm install
+---
 
-6. Build asset
-npm run build
+## 🛠️ Teknologi
 
-7. Jalankan server
-php artisan serve
+- Backend: Laravel 12 (PHP 8+)
+- Database: SQLite / MySQL
+- Frontend: Blade, Bootstrap / Tailwind
+- Tools: Composer, Node.js, NPM
+
+---
+
+## 📂 Struktur Project
