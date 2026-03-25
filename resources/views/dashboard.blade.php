@@ -88,8 +88,8 @@
                             </div>
                             <div class="text-end">
                                 <p class="mb-2"><strong>No. WhatsApp:</strong></p>
-                                <a href="https://wa.me/628123456789" target="_blank" class="btn btn-success btn-lg">
-                                    <i class="fab fa-whatsapp me-2"></i>+62 812-3456-789
+                                <a href="https://wa.me/6285892885324" target="_blank" class="btn btn-success btn-lg">
+                                    <i class="fab fa-whatsapp me-2"></i>+62 858-9288-5324
                                 </a>
                             </div>
                         </div>

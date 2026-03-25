@@ -14,7 +14,7 @@ class RoleMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      * @param  string $role The role(s) required to access the resource
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string $role)
     {
         // First check if user is authenticated
         if (!auth()->user()) {
@@ -47,6 +47,7 @@ class RoleMiddleware
             abort(403, 'Unauthorized access');
         }
         
-        return $next($request);
+        $response = $next($request);
+        return $response;
     }
 }
