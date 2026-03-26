@@ -73,7 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ================= IZIN KELUAR =================
     Route::get('izin-keluar/create', [IzinKeluarController::class, 'create'])->middleware('role:admin,guru')->name('izin-keluar.create');
     Route::post('izin-keluar', [IzinKeluarController::class, 'store'])->middleware('role:admin,guru')->name('izin-keluar.store');
-    Route::resource('izin-keluar', IzinKeluarController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::resource('izin-keluar', IzinKeluarController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:admin,guru');
     Route::get('izin-keluar/{izinKeluar}/edit', [IzinKeluarController::class, 'edit'])->middleware('role:admin,guru')->name('izin-keluar.edit');
     Route::put('izin-keluar/{izinKeluar}', [IzinKeluarController::class, 'update'])->middleware('role:admin,guru')->name('izin-keluar.update');
     Route::delete('izin-keluar/{izinKeluar}', [IzinKeluarController::class, 'destroy'])->middleware('role:admin,guru')->name('izin-keluar.destroy');
@@ -81,7 +81,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ================= KETERLAMBATAN =================
     Route::get('keterlambatan/create', [KeterlambatanController::class, 'create'])->middleware('role:admin,guru')->name('keterlambatan.create');
     Route::post('keterlambatan', [KeterlambatanController::class, 'store'])->middleware('role:admin,guru')->name('keterlambatan.store');
-    Route::resource('keterlambatan', KeterlambatanController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::resource('keterlambatan', KeterlambatanController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:admin,guru');
     Route::get('keterlambatan/{keterlambatan}/edit', [KeterlambatanController::class, 'edit'])->middleware('role:admin,guru')->name('keterlambatan.edit');
     Route::put('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'update'])->middleware('role:admin,guru')->name('keterlambatan.update');
     Route::delete('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'destroy'])->middleware('role:admin,guru')->name('keterlambatan.destroy');
