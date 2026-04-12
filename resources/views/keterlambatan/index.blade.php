@@ -2,36 +2,6 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <!-- User Info Card -->
-    <div class="card mb-4" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">
-                        <i class="fas fa-user-circle me-2"></i>
-                        {{ auth()->user()->name }}
-                    </h5>
-                    <p class="mb-0 opacity-75">
-                        <i class="fas fa-briefcase me-1"></i>
-                        @if(auth()->user()->role === 'admin')
-                            Administrator
-                        @elseif(auth()->user()->role === 'kepsek')
-                            Kepala Sekolah
-                        @else
-                            Guru Piket
-                        @endif
-                    </p>
-                </div>
-                <div class="text-end">
-                    <small class="opacity-75">Login Sebagai</small>
-                    <div class="badge bg-white text-dark">
-                        {{ strtoupper(auth()->user()->role) }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -39,10 +9,10 @@
                 <i class="fas fa-clock me-2"></i>
                 Data Keterlambatan
             </h2>
-            <p class="text-muted mb-0">Kelola data keterlambatan siswa</p>
+            <p class="text-muted mb-0">Kelola dan monitor keterlambatan siswa</p>
         </div>
         @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
-            <a href="{{ route('keterlambatan.create') }}" class="btn btn-primary" style="border-radius: 10px; padding: 0.625rem 1.25rem;">
+            <a href="{{ route('keterlambatan.create') }}" class="btn btn-primary" style="border-radius: 10px; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none;">
                 <i class="fas fa-plus me-2"></i>
                 Catat Keterlambatan
             </a>
@@ -115,57 +85,60 @@
                             <h6 class="mb-0 text-white-50">Bulan Ini</h6>
                             <h3 class="mb-0">{{ $keterlambatanBulanIni ?? 0 }}</h3>
                         </div>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: #6366f1; color: white; border: none;">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Cari siswa, kelas, atau guru..." style="border-radius: 0 10px 10px 0; border-left: none; border-color: #e2e8f0;">
                     </div>
+                </div>
+                <div class="col-md-3">
+                    <input type="date" class="form-control" id="filterDate" style="border-radius: 10px; border-color: #e2e8f0;">
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()" style="border-radius: 10px; border-color: #e2e8f0;">
+                        <i class="fas fa-redo me-2"></i>Reset Filter
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Data Table -->
-    <div class="card" style="border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);">
+    <div class="card" style="border-radius: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
         <div class="card-header bg-white border-0 py-3" style="border-radius: 15px 15px 0 0;">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h5 class="mb-0" style="color: #1e293b; font-weight: 600;">
-                        <i class="fas fa-table me-2" style="color: #6366f1;"></i>
-                        Data Keterlambatan Siswa
-                    </h5>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-text" style="background: #6366f1; color: white; border: none;">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input type="text" class="form-control" placeholder="Cari siswa atau kelas..." id="searchInput" style="border-left: none;">
-                    </div>
-                </div>
-            </div>
+            <h5 class="mb-0" style="color: #1e293b; font-weight: 600;">
+                <i class="fas fa-list me-2" style="color: #6366f1;"></i>
+                Daftar Keterlambatan Siswa
+            </h5>
         </div>
-        <div class="card-body p-0">
+        <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover mb-0" id="keterlambatanTable">
-                    <thead class="table-light">
+                <table class="table table-hover" id="keterlambatanTable">
+                    <thead>
                         <tr>
-                            <th class="border-0">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-user me-2"></i>Siswa
                             </th>
-                            <th class="border-0">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-graduation-cap me-2"></i>Kelas
                             </th>
-                            <th class="border-0">
-                                <i class="fas fa-chalkboard-teacher me-2"></i>Guru Piket
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                <i class="fas fa-chalkboard-teacher me-2"></i>Guru
                             </th>
-                            <th class="border-0">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-clock me-2"></i>Waktu Datang
                             </th>
-                            <th class="border-0">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-hourglass-half me-2"></i>Durasi
                             </th>
-                            <th class="border-0">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-comment me-2"></i>Keterangan
                             </th>
-                            <th class="border-0 text-center">
-                                <i class="fas fa-cog me-2"></i>Aksi
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                <i class="fas fa-cogs me-2"></i>Aksi
                             </th>
                         </tr>
                     </thead>
@@ -261,105 +234,181 @@
         </div>
     </div>
     
-    <!-- Custom CSS -->
-    <style>
-    .table-light {
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
-    }
-    
-    .table-light th {
-        border: none !important;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-        color: #495057;
-    }
-    
-    .hover-row {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-row:hover {
-        background-color: #f8f9fc !important;
-        transform: translateX(2px);
-    }
-    
-    .btn-action {
-        padding: 0.375rem 0.75rem;
-        border-radius: 8px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .btn-action:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .avatar-sm {
-        width: 40px;
-        height: 40px;
-        font-size: 0.875rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    .input-group-text {
-        border: none;
-    }
-    
-    .form-control:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
-    }
-    
-    .pagination .page-link {
-        color: #6366f1;
-        border: 1px solid #dee2e6;
-        margin: 0 2px;
-        border-radius: 8px;
-    }
-    
-    .pagination .page-item.active .page-link {
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        border-color: #6366f1;
-    }
-    
-    .pagination .page-link:hover {
-        color: #8b5cf6;
-        background-color: #f8f9fc;
-    }
-    
-    .badge {
-        font-weight: 500;
-        padding: 0.375rem 0.75rem;
-        border-radius: 8px;
-    }
-    </style>
-    
-    <!-- JavaScript for Search -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const table = document.getElementById('keterlambatanTable');
-        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    <!-- Pagination -->
+            <div class="mt-3">
+                {{ $keterlambatan->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-row:hover {
+    background-color: rgba(99, 102, 241, 0.05) !important;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+}
+
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-control:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-outline-danger:hover {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border-color: #ef4444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+.table th {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.pagination .page-link {
+    color: #6366f1;
+    border: 1px solid #dee2e6;
+    margin: 0 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: #6366f1;
+}
+
+.pagination .page-link:hover {
+    color: #8b5cf6;
+    background-color: rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterDate = document.getElementById('filterDate');
+    const table = document.getElementById('keterlambatanTable');
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filterDateValue = filterDate.value;
         
-        function filterTable() {
-            const searchTerm = searchInput.value.toLowerCase();
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
             
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
-                const text = row.textContent.toLowerCase();
+            if (cells.length === 0) continue;
+            
+            let showRow = true;
+            
+            // Search filter
+            if (searchTerm) {
+                const siswaCell = cells[0].textContent.toLowerCase();
+                const kelasCell = cells[1].textContent.toLowerCase();
+                const guruCell = cells[2].textContent.toLowerCase();
+                const keteranganCell = cells[5].textContent.toLowerCase();
                 
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+                if (!siswaCell.includes(searchTerm) && 
+                    !kelasCell.includes(searchTerm) && 
+                    !guruCell.includes(searchTerm) && 
+                    !keteranganCell.includes(searchTerm)) {
+                    showRow = false;
                 }
             }
+            
+            // Date filter
+            if (filterDateValue && showRow) {
+                const waktuCell = cells[3].textContent.trim();
+                // Extract date from text (format: "d/m/Y H:i")
+                const dateMatch = waktuCell.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                if (dateMatch) {
+                    const [, day, month, year] = dateMatch;
+                    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                    if (formattedDate !== filterDateValue) {
+                        showRow = false;
+                    }
+                }
+            }
+            
+            row.style.display = showRow ? '' : 'none';
         }
-        
-        searchInput.addEventListener('keyup', filterTable);
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    filterDate.addEventListener('change', filterTable);
+
+    // Add animation to cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('fade-in');
     });
-    </script>
-</div>
+});
+
+// Clear filters function
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('filterDate').value = '';
+    
+    const event = new Event('input');
+    document.getElementById('searchInput').dispatchEvent(event);
+}
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in {
+        animation: fade-in 0.6s ease-out forwards;
+    }
+`;
+document.head.appendChild(style);
+</script>
 @endsection

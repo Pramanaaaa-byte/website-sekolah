@@ -1,103 +1,161 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-4">
-    <!-- User Info Card -->
-    <div class="card mb-4" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white;">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-1">
-                        <i class="fas fa-user-circle me-2"></i>
-                        {{ auth()->user()->name }}
-                    </h5>
-                    <p class="mb-0 opacity-75">
-                        <i class="fas fa-briefcase me-1"></i>
-                        @if(auth()->user()->role === 'admin')
-                            Administrator
-                        @elseif(auth()->user()->role === 'kepsek')
-                            Kepala Sekolah
-                        @else
-                            Guru Piket
-                        @endif
-                    </p>
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1" style="color: #4e73df; font-weight: 700;">
+                <i class="fas fa-door-open me-2"></i>
+                Data Izin Keluar
+            </h2>
+            <p class="text-muted mb-0">Kelola dan monitor izin keluar siswa</p>
+        </div>
+        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
+            <a href="{{ route('izin-keluar.create') }}" class="btn btn-primary" style="border-radius: 10px; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #4e73df, #224abe); border: none;">
+                <i class="fas fa-plus me-2"></i>
+                Tambah Izin
+            </a>
+        @endif
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #4e73df, #224abe); color: white;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0 text-white-50">Total Izin</h6>
+                            <h3 class="mb-0">{{ $izin->count() }}</h3>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-end">
-                    <small class="opacity-75">Login Sebagai</small>
-                    <div class="badge bg-white text-dark">
-                        {{ strtoupper(auth()->user()->role) }}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #1cc88a, #17a673); color: white;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0 text-white-50">Disetujui</h6>
+                            <h3 class="mb-0">{{ $izin->where('status', 'approved')->count() }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #f6c23e, #dda20a); color: white;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0 text-white-50">Pending</h6>
+                            <h3 class="mb-0">{{ $izin->where('status', 'pending')->count() }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #e74a3b, #c0392b); color: white;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-0 text-white-50">Ditolak</h6>
+                            <h3 class="mb-0">{{ $izin->where('status', 'rejected')->count() }}</h3>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 style="color: var(--primary-color);">Izin Keluar Siswa</h2>
-        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
-            <a href="{{ route('izin-keluar.create') }}" class="btn btn-primary">
-                + Ajukan Izin
-            </a>
-        @endif
-    </div>
-    
-    <div class="card">
-        <div class="card-body p-0">
-            <!-- Search and Filter Section -->
-            <div class="p-3 border-bottom">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <div class="input-group">
-                            <span class="input-group-text bg-primary text-white">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <input type="text" class="form-control" placeholder="Cari izin berdasarkan nama siswa atau alasan..." id="searchInput">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <select class="form-select" id="statusFilter">
-                            <option value="">Semua Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="approved">Disetujui</option>
-                            <option value="rejected">Ditolak</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="text-end">
-                            <small class="text-muted">Total: {{ $izin->count() }} izin</small>
-                        </div>
+    <!-- Filter Section -->
+    <div class="card mb-4" style="border-radius: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: #4e73df; color: white; border: none;">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Cari siswa atau alasan..." style="border-radius: 0 10px 10px 0; border-left: none; border-color: #e2e8f0;">
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter" style="border-radius: 10px; border-color: #e2e8f0;">
+                        <option value="">Semua Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Disetujui</option>
+                        <option value="rejected">Ditolak</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()" style="border-radius: 10px; border-color: #e2e8f0;">
+                        <i class="fas fa-redo me-2"></i>Reset
+                    </button>
+                </div>
             </div>
-            
-            <!-- Modern Table -->
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="card" style="border-radius: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+        <div class="card-header bg-white border-0 py-3" style="border-radius: 15px 15px 0 0;">
+            <h5 class="mb-0" style="color: #1e293b; font-weight: 600;">
+                <i class="fas fa-list me-2" style="color: #4e73df;"></i>
+                Daftar Izin Keluar
+            </h5>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover mb-0" id="izinTable">
-                    <thead class="table-primary">
+                <table class="table table-hover" id="izinTable">
+                    <thead>
                         <tr>
-                            <th class="border-0 text-white">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-user me-2"></i>Siswa
                             </th>
-                            <th class="border-0 text-white">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-graduation-cap me-2"></i>Kelas
                             </th>
-                            <th class="border-0 text-white">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-chalkboard-teacher me-2"></i>Guru
                             </th>
-                            <th class="border-0 text-white">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-comment me-2"></i>Alasan
                             </th>
-                            <th class="border-0 text-white">
-                                <i class="fas fa-clock me-2"></i>Waktu Keluar
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Waktu Keluar
                             </th>
-                            <th class="border-0 text-white">
-                                <i class="fas fa-clock me-2"></i>Waktu Kembali
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                <i class="fas fa-sign-in-alt me-2"></i>Waktu Kembali
                             </th>
-                            <th class="border-0 text-center text-white">
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
                                 <i class="fas fa-info-circle me-2"></i>Status
                             </th>
-                            <th class="border-0 text-center text-white">
-                                <i class="fas fa-cog me-2"></i>Aksi
+                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                                <i class="fas fa-cogs me-2"></i>Aksi
                             </th>
                         </tr>
                     </thead>
@@ -196,105 +254,177 @@
         </div>
     </div>
     
-    <!-- Custom CSS -->
-    <style>
-    .table-primary {
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%) !important;
-    }
-    
-    .table-primary th {
-        border: none !important;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-    }
-    
-    .hover-row {
-        transition: all 0.3s ease;
-    }
-    
-    .hover-row:hover {
-        background-color: #f8f9fc !important;
-        transform: translateX(2px);
-    }
-    
-    .btn-action {
-        padding: 0.375rem 0.75rem;
-        border-radius: 0.375rem;
-        transition: all 0.2s ease;
-    }
-    
-    .btn-action:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    
-    .avatar-sm {
-        width: 40px;
-        height: 40px;
-        font-size: 0.875rem;
-    }
-    
-    .input-group-text {
-        border: none;
-    }
-    
-    .form-control:focus {
-        border-color: #4e73df;
-        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-    }
-    
-    .pagination .page-link {
-        color: #4e73df;
-        border: 1px solid #dee2e6;
-        margin: 0 2px;
-        border-radius: 0.375rem;
-    }
-    
-    .pagination .page-item.active .page-link {
-        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
-        border-color: #4e73df;
-    }
-    
-    .pagination .page-link:hover {
-        color: #224abe;
-        background-color: #f8f9fc;
-    }
-    </style>
-    
-    <!-- JavaScript for Search and Filter -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const statusFilter = document.getElementById('statusFilter');
-        const table = document.getElementById('izinTable');
-        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+    <!-- Pagination -->
+            <div class="mt-3">
+                {{ $izin->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hover-row:hover {
+    background-color: rgba(78, 115, 223, 0.05) !important;
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(78, 115, 223, 0.1);
+    transition: all 0.3s ease;
+}
+
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.form-select:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #4e73df, #224abe);
+    border-color: #4e73df;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 115, 223, 0.3);
+}
+
+.btn-outline-danger:hover {
+    background: linear-gradient(135deg, #e74a3b, #c0392b);
+    border-color: #e74a3b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 74, 59, 0.3);
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+.table th {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.pagination .page-link {
+    color: #4e73df;
+    border: 1px solid #dee2e6;
+    margin: 0 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #4e73df, #224abe);
+    border-color: #4e73df;
+}
+
+.pagination .page-link:hover {
+    color: #224abe;
+    background-color: rgba(78, 115, 223, 0.1);
+    transform: translateY(-1px);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const table = document.getElementById('izinTable');
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const statusValue = statusFilter.value;
         
-        function filterTable() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const statusValue = statusFilter.value;
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
             
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
-                const siswa = row.cells[0].textContent.toLowerCase();
-                const alasan = row.cells[3].textContent.toLowerCase();
-                const status = row.cells[6].textContent.toLowerCase();
+            if (cells.length === 0) continue;
+            
+            let showRow = true;
+            
+            // Search filter
+            if (searchTerm) {
+                const siswaCell = cells[0].textContent.toLowerCase();
+                const alasanCell = cells[3].textContent.toLowerCase();
+                const guruCell = cells[2].textContent.toLowerCase();
                 
-                const matchesSearch = siswa.includes(searchTerm) || alasan.includes(searchTerm);
-                const matchesStatus = statusValue === '' || status.includes(statusValue.toLowerCase());
-                
-                if (matchesSearch && matchesStatus) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
+                if (!siswaCell.includes(searchTerm) && 
+                    !alasanCell.includes(searchTerm) && 
+                    !guruCell.includes(searchTerm)) {
+                    showRow = false;
                 }
             }
+            
+            // Status filter
+            if (statusValue && showRow) {
+                const statusCell = cells[6].textContent.toLowerCase();
+                if (!statusCell.includes(statusValue.toLowerCase())) {
+                    showRow = false;
+                }
+            }
+            
+            row.style.display = showRow ? '' : 'none';
         }
-        
-        searchInput.addEventListener('keyup', filterTable);
-        statusFilter.addEventListener('change', filterTable);
+    }
+
+    searchInput.addEventListener('input', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+
+    // Add animation to cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('fade-in');
     });
-    </script>
-</div>
+});
+
+// Clear filters function
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('statusFilter').value = '';
+    
+    const event = new Event('input');
+    document.getElementById('searchInput').dispatchEvent(event);
+}
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in {
+        animation: fade-in 0.6s ease-out forwards;
+    }
+`;
+document.head.appendChild(style);
+</script>
 @endsection
