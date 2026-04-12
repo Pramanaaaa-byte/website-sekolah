@@ -79,4 +79,19 @@ class SiswaController extends Controller
         return redirect()->route('siswa.index')
             ->with('success', 'Data siswa berhasil dihapus.');
     }
+
+    public function laporan()
+    {
+        if (auth()->user()->role !== 'kepsek') {
+            abort(403, 'Unauthorized access');
+        }
+        
+        $siswa = Siswa::latest()->paginate(15);
+        $totalSiswa = Siswa::count();
+        $totalPerKelas = Siswa::selectRaw('kelas, COUNT(*) as total')
+            ->groupBy('kelas')
+            ->get();
+        
+        return view('laporan.siswa', compact('siswa', 'totalSiswa', 'totalPerKelas'));
+    }
 }

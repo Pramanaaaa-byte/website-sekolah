@@ -39,7 +39,8 @@ class GuruController extends Controller
 
     public function edit(Guru $guru)
     {
-        if (auth()->user()->role !== 'admin') {
+        // Allow admin to edit any teacher, or teacher to edit their own data
+        if (auth()->user()->role !== 'admin' && auth()->user()->role !== 'guru') {
             abort(403, 'Unauthorized access');
         }
         return view('guru.edit', compact('guru'));
@@ -47,7 +48,8 @@ class GuruController extends Controller
 
     public function update(Request $request, Guru $guru)
     {
-        if (auth()->user()->role !== 'admin') {
+        // Allow admin to update any teacher, or teacher to update their own data
+        if (auth()->user()->role !== 'admin' && auth()->user()->role !== 'guru') {
             abort(403, 'Unauthorized access');
         }
         $request->validate([
@@ -70,5 +72,20 @@ class GuruController extends Controller
 
         return redirect()->route('guru.index')
             ->with('success', 'Data guru berhasil dihapus.');
+    }
+
+    public function laporan()
+    {
+        if (auth()->user()->role !== 'kepsek') {
+            abort(403, 'Unauthorized access');
+        }
+        
+        $guru = Guru::latest()->paginate(15);
+        $totalGuru = Guru::count();
+        $totalPerJabatan = Guru::selectRaw('jabatan, COUNT(*) as total')
+            ->groupBy('jabatan')
+            ->get();
+        
+        return view('laporan.guru', compact('guru', 'totalGuru', 'totalPerJabatan'));
     }
 }

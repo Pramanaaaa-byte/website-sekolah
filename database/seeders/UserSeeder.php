@@ -15,28 +15,34 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@eduspace.com',
-            'password' => Hash::make('password123'),
-            'email_verified_at' => now(),
-            'role' => 'admin',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@eduspace.com'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password123'),
+                'email_verified_at' => now(),
+                'role' => 'admin',
+            ]
+        );
 
-        User::create([
-            'name' => 'Kepala Sekolah',
-            'email' => 'kepsek@eduspace.com',
-            'password' => Hash::make('password123'),
-            'email_verified_at' => now(),
-            'role' => 'kepsek',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'kepsek@eduspace.com'],
+            [
+                'name' => 'Kepala Sekolah',
+                'password' => Hash::make('password123'),
+                'email_verified_at' => now(),
+                'role' => 'kepsek',
+            ]
+        );
 
-        User::create([
-            'name' => 'Guru Piket',
-            'email' => 'guru@eduspace.com',
-            'password' => Hash::make('password123'),
-            'email_verified_at' => now(),
-            'role' => 'guru',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'guru@eduspace.com'],
+            [
+                'name' => 'Guru Piket',
+                'password' => Hash::make('password123'),
+                'email_verified_at' => now(),
+                'role' => 'guru',
+            ]
+        );
     }
 }

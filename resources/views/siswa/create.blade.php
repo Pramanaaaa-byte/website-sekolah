@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="py-4">
-        <h2 class="mb-4" style="color: var(--primary-color);">Tambah Siswa</h2>
+        <h2 class="mb-4" style="color: #64748b;">Tambah Siswa</h2>
         
         <div class="card">
             <div class="card-body">

@@ -109,4 +109,21 @@ class PelanggaranController extends Controller
 
         return view('pelanggaran.rekap', compact('rekap'));
     }
+
+    public function laporan(): View
+    {
+        if (auth()->user()->role !== 'kepsek') {
+            abort(403, 'Unauthorized access');
+        }
+        
+        $pelanggaran = Pelanggaran::with(['siswa', 'guru'])->latest()->paginate(15);
+        $totalPelanggaran = Pelanggaran::count();
+        $pelanggaranBulanIni = Pelanggaran::whereMonth('tanggal', now()->month)
+            ->whereYear('tanggal', now()->year)
+            ->count();
+        $totalPoin = Pelanggaran::sum('poin');
+        $rerataPoin = Pelanggaran::avg('poin');
+        
+        return view('laporan.pelanggaran', compact('pelanggaran', 'totalPelanggaran', 'pelanggaranBulanIni', 'totalPoin', 'rerataPoin'));
+    }
 }

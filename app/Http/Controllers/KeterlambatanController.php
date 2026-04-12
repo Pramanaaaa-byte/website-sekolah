@@ -70,4 +70,20 @@ class KeterlambatanController extends Controller
         return redirect()->route('keterlambatan.index')
             ->with('success', 'Data keterlambatan berhasil dihapus.');
     }
+
+    public function laporan()
+    {
+        if (auth()->user()->role !== 'kepsek') {
+            abort(403, 'Unauthorized access');
+        }
+        
+        $keterlambatan = Keterlambatan::with(['siswa', 'guru'])->latest()->paginate(15);
+        $totalKeterlambatan = Keterlambatan::count();
+        $keterlambatanBulanIni = Keterlambatan::whereMonth('waktu_datang', now()->month)
+            ->whereYear('waktu_datang', now()->year)
+            ->count();
+        $rerataDurasi = Keterlambatan::avg('durasi');
+        
+        return view('laporan.keterlambatan', compact('keterlambatan', 'totalKeterlambatan', 'keterlambatanBulanIni', 'rerataDurasi'));
+    }
 }

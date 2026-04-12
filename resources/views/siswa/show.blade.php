@@ -3,8 +3,8 @@
 @section('content')
     <div class="py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0" style="color: var(--primary-color);">Detail Siswa</h2>
-            <a href="{{ route('siswa.index') }}" class="btn btn-secondary">
+            <h2 class="mb-0" style="color: #64748b;">Detail Siswa</h2>
+            <a href="{{ route('siswa.index') }}" class="btn btn-secondary" style="background: linear-gradient(135deg, #64748b, #94a3b8); border: 1px solid rgba(255, 255, 255, 0.2);"
                 <i class="fas fa-arrow-left me-2"></i>Kembali
             </a>
         </div>

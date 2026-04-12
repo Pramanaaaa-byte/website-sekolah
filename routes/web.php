@@ -13,7 +13,8 @@ use App\Http\Controllers\QRScannerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    // Selalu tampilkan halaman home, biarkan user memilih untuk login atau melihat fitur
+    return view('home');
 });
 
 // Simple test routes
@@ -45,6 +46,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Test dashboard data
+    Route::get('/test-dashboard', function() {
+        try {
+            $totalSiswa = \App\Models\Siswa::count();
+            $totalGuru = \App\Models\Guru::count();
+            $totalPiket = \App\Models\Piket::count();
+            $totalKeterlambatan = \App\Models\Keterlambatan::count();
+            $totalPelanggaran = \App\Models\Pelanggaran::count();
+            $totalIzin = \App\Models\IzinKeluar::count();
+            
+            return "Dashboard data test successful: Siswa: $totalSiswa, Guru: $totalGuru, Piket: $totalPiket, Keterlambatan: $totalKeterlambatan, Pelanggaran: $totalPelanggaran, Izin: $totalIzin";
+        } catch (\Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    });
 
     // ================= SISWA =================
     Route::get('siswa/create', [SiswaController::class, 'create'])->middleware('role:admin')->name('siswa.create');
@@ -71,29 +88,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('piket/{piket}', [PiketController::class, 'destroy'])->middleware('role:admin')->name('piket.destroy');
 
     // ================= IZIN KELUAR =================
-    Route::get('izin-keluar/create', [IzinKeluarController::class, 'create'])->middleware('role:admin,guru')->name('izin-keluar.create');
-    Route::post('izin-keluar', [IzinKeluarController::class, 'store'])->middleware('role:admin,guru')->name('izin-keluar.store');
-    Route::resource('izin-keluar', IzinKeluarController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:admin,guru');
-    Route::get('izin-keluar/{izinKeluar}/edit', [IzinKeluarController::class, 'edit'])->middleware('role:admin,guru')->name('izin-keluar.edit');
-    Route::put('izin-keluar/{izinKeluar}', [IzinKeluarController::class, 'update'])->middleware('role:admin,guru')->name('izin-keluar.update');
-    Route::delete('izin-keluar/{izinKeluar}', [IzinKeluarController::class, 'destroy'])->middleware('role:admin,guru')->name('izin-keluar.destroy');
+    Route::get('izin-keluar/create', [IzinKeluarController::class, 'create'])->middleware('role:guru')->name('izin-keluar.create');
+    Route::post('izin-keluar', [IzinKeluarController::class, 'store'])->middleware('role:guru')->name('izin-keluar.store');
+    Route::resource('izin-keluar', IzinKeluarController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:guru');
+    Route::get('izin-keluar/{izinKeluar}/edit', [IzinKeluarController::class, 'edit'])->middleware('role:guru')->name('izin-keluar.edit');
+    Route::put('izin-keluar/{izinKeluar}', [IzinKeluarController::class, 'update'])->middleware('role:guru')->name('izin-keluar.update');
+    Route::delete('izin-keluar/{izinKeluar}', [IzinKeluarController::class, 'destroy'])->middleware('role:guru')->name('izin-keluar.destroy');
 
     // ================= KETERLAMBATAN =================
-    Route::get('keterlambatan/create', [KeterlambatanController::class, 'create'])->middleware('role:admin,guru')->name('keterlambatan.create');
-    Route::post('keterlambatan', [KeterlambatanController::class, 'store'])->middleware('role:admin,guru')->name('keterlambatan.store');
-    Route::resource('keterlambatan', KeterlambatanController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:admin,guru');
-    Route::get('keterlambatan/{keterlambatan}/edit', [KeterlambatanController::class, 'edit'])->middleware('role:admin,guru')->name('keterlambatan.edit');
-    Route::put('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'update'])->middleware('role:admin,guru')->name('keterlambatan.update');
-    Route::delete('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'destroy'])->middleware('role:admin,guru')->name('keterlambatan.destroy');
+    Route::get('keterlambatan/create', [KeterlambatanController::class, 'create'])->middleware('role:guru')->name('keterlambatan.create');
+    Route::post('keterlambatan', [KeterlambatanController::class, 'store'])->middleware('role:guru')->name('keterlambatan.store');
+    Route::resource('keterlambatan', KeterlambatanController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:guru');
+    Route::get('keterlambatan/{keterlambatan}/edit', [KeterlambatanController::class, 'edit'])->middleware('role:guru')->name('keterlambatan.edit');
+    Route::put('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'update'])->middleware('role:guru')->name('keterlambatan.update');
+    Route::delete('keterlambatan/{keterlambatan}', [KeterlambatanController::class, 'destroy'])->middleware('role:guru')->name('keterlambatan.destroy');
 
     // ================= PELANGGARAN =================
-    Route::get('pelanggaran/create', [PelanggaranController::class, 'create'])->middleware('role:admin')->name('pelanggaran.create');
-    Route::post('pelanggaran', [PelanggaranController::class, 'store'])->middleware('role:admin')->name('pelanggaran.store');
-    Route::get('pelanggaran/rekap', [PelanggaranController::class, 'rekap'])->name('pelanggaran.rekap');
-    Route::resource('pelanggaran', PelanggaranController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
-    Route::get('pelanggaran/{pelanggaran}/edit', [PelanggaranController::class, 'edit'])->middleware('role:admin')->name('pelanggaran.edit');
-    Route::put('pelanggaran/{pelanggaran}', [PelanggaranController::class, 'update'])->middleware('role:admin')->name('pelanggaran.update');
-    Route::delete('pelanggaran/{pelanggaran}', [PelanggaranController::class, 'destroy'])->middleware('role:admin')->name('pelanggaran.destroy');
+    Route::get('pelanggaran/create', [PelanggaranController::class, 'create'])->middleware('role:admin,guru')->name('pelanggaran.create');
+    Route::post('pelanggaran', [PelanggaranController::class, 'store'])->middleware('role:admin,guru')->name('pelanggaran.store');
+    Route::get('pelanggaran/rekap', [PelanggaranController::class, 'rekap'])->middleware('role:admin,guru')->name('pelanggaran.rekap');
+    Route::resource('pelanggaran', PelanggaranController::class)->except(['create', 'store', 'edit', 'update', 'destroy'])->middleware('role:admin,guru');
+    Route::get('pelanggaran/{pelanggaran}/edit', [PelanggaranController::class, 'edit'])->middleware('role:admin,guru')->name('pelanggaran.edit');
+    Route::put('pelanggaran/{pelanggaran}', [PelanggaranController::class, 'update'])->middleware('role:admin,guru')->name('pelanggaran.update');
+    Route::delete('pelanggaran/{pelanggaran}', [PelanggaranController::class, 'destroy'])->middleware('role:admin,guru')->name('pelanggaran.destroy');
 
     // ================= JADWAL PIKET =================
     Route::get('jadwal-piket/create', [JadwalPiketController::class, 'create'])->middleware('role:admin,guru')->name('jadwal-piket.create');
@@ -107,6 +124,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ================= QR =================
     Route::post('/api/qr-scan', [QRScannerController::class, 'scan'])->middleware('role:admin,guru')->name('qr.scan');
     Route::get('/api/qr-generate/{siswa}', [QRScannerController::class, 'generateQr'])->middleware('role:admin,guru')->name('qr.generate');
+
+    // ================= LAPORAN (KEPALA SEKOLAH) =================
+    Route::get('laporan/siswa', [SiswaController::class, 'laporan'])->middleware('role:kepsek')->name('laporan.siswa');
+    Route::get('laporan/guru', [GuruController::class, 'laporan'])->middleware('role:kepsek')->name('laporan.guru');
+    Route::get('laporan/piket', [PiketController::class, 'laporan'])->middleware('role:kepsek')->name('laporan.piket');
+    Route::get('laporan/izin', [IzinKeluarController::class, 'laporan'])->middleware('role:kepsek')->name('laporan.izin');
+    Route::get('laporan/keterlambatan', [KeterlambatanController::class, 'laporan'])->middleware('role:kepsek')->name('laporan.keterlambatan');
+    Route::get('laporan/pelanggaran', [PelanggaranController::class, 'laporan'])->middleware('role:kepsek')->name('laporan.pelanggaran');
 
     // ================= AUTH =================
     Route::middleware('guest')->group(function () {

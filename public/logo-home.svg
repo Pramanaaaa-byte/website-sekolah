@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="logoGradHome" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Logo Icon -->
+  <g transform="translate(15, 30)">
+    <!-- Background circle -->
+    <circle cx="0" cy="0" r="20" fill="url(#logoGradHome)" opacity="0.1"/>
+    
+    <!-- Graduation cap -->
+    <g transform="translate(0, -2)">
+      <!-- Cap base -->
+      <path d="M -12 3 L 0 -3 L 12 3 L 0 9 Z" fill="url(#logoGradHome)"/>
+      <!-- Cap top -->
+      <path d="M -12 3 L 0 -3 L 12 3 L 0 9 Z" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.5"/>
+      <!-- Tassel -->
+      <line x1="0" y1="-3" x2="0" y2="-9" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="0" cy="-9" r="2" fill="#fff"/>
+    </g>
+  </g>
+  
+  <!-- Text -->
+  <text x="45" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#4e73df">Edu</text>
+  <text x="70" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="400" fill="#764ba2">space</text>
+  <text x="45" y="42" font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#858796">Sistem Manajemen Sekolah</text>
+</svg>

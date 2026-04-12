@@ -26,17 +26,31 @@
     <!-- Custom Styles -->
     <style>
         :root {
-            --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --accent-color: #ec4899;
-            --sidebar-bg: #1e293b;
-            --sidebar-text: #f1f5f9;
-            --sidebar-hover: #334155;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --primary-color: #7c3aed;
+            --secondary-color: #5b21b6;
+            --accent-color: #6366f1;
+            --sidebar-bg: #1a1a2e;
+            --sidebar-text: #e2e8f0;
+            --sidebar-hover: #2d2d3a;
+            --card-shadow: 0 4px 6px rgba(124, 58, 237, 0.1);
+            --border-color: #e5e7eb;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-light: #f8fafc;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-light);
             min-height: 100vh;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
@@ -44,69 +58,223 @@
             overflow-x: hidden;
         }
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: none;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-            height: 60px;
-            transition: all 0.2s ease;
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
         }
 
         .sidebar {
-            background: var(--sidebar-bg);
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            width: 250px;
             min-height: 100vh;
-            border-radius: 0;
-            box-shadow: var(--card-shadow);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 280px;
-            height: 100vh;
             overflow-y: auto;
-            z-index: 1030;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform;
-        }
-
-        .sidebar-container {
+            overflow-x: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+            border-right: 1px solid rgba(99, 102, 241, 0.2);
             position: fixed;
             top: 0;
             left: 0;
-            width: 280px;
-            height: 100vh;
-            z-index: 1020;
-            transition: transform 0.3s ease;
-            will-change: transform;
+            z-index: 1050;
         }
 
-        .sidebar .nav-link {
-            color: var(--sidebar-text);
-            padding: 0.875rem 1rem;
-            margin: 0.25rem 0;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
+        /* Sidebar Header (Navbar Integration) */
+        .sidebar-header {
             display: flex;
             align-items: center;
-            font-weight: 500;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand:hover {
+            transform: translateX(3px);
+        }
+
+        .brand-text {
+            color: white;
+            font-weight: 700;
+        }
+
+        .navbar-toggler {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.4rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Sidebar User Section */
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 1rem 1.5rem;
+            margin: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .sidebar .nav-link {
-            color: var(--sidebar-text);
-            padding: 0.875rem 1rem;
-            margin: 0.25rem 0;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
+        .sidebar-user::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .sidebar-user:hover::before {
+            left: 100%;
+        }
+
+        .sidebar-user:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .sidebar-user .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
             display: flex;
             align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-user:hover .user-avatar {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .sidebar-user .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar-user .user-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.3px;
+        }
+
+        .sidebar-user .user-role {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.85);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             font-weight: 500;
+            background: rgba(99, 102, 241, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            padding: 1rem;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.7rem;
+            margin-bottom: 0.75rem;
+            padding: 0 0.75rem;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .nav-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0.75rem;
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, transparent);
+        }
+
+        .sidebar .nav-link {
+            color: #e2e8f0;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 0;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            border: 1px solid transparent;
+            font-size: 0.9rem;
             position: relative;
             overflow: hidden;
         }
@@ -118,95 +286,178 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.6s ease;
         }
 
         .sidebar .nav-link:hover::before {
             left: 100%;
         }
 
-        .sidebar .nav-link:hover {
-            background: var(--sidebar-hover);
-            transform: translateX(4px);
-            color: white;
+        .sidebar .nav-link i {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            flex-shrink: 0;
         }
 
-        .sidebar .nav-link.active {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        /* Izin Keluar Section */
+        .nav-section:has(.nav-link[href*="izin-keluar"]) .nav-section-title {
+            color: #10b981;
+            border-bottom-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .nav-section:has(.nav-link[href*="izin-keluar"]) .nav-link {
+            border: 1px solid transparent;
+        }
+
+        .nav-section:has(.nav-link[href*="izin-keluar"]) .nav-link:hover {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .nav-section:has(.nav-link[href*="izin-keluar"]) .nav-link.active {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Keterlambatan Section */
+        .nav-section:has(.nav-link[href*="keterlambatan"]) .nav-section-title {
+            color: #f59e0b;
+            border-bottom-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .nav-section:has(.nav-link[href*="keterlambatan"]) .nav-link {
+            border: 1px solid transparent;
+        }
+
+        .nav-section:has(.nav-link[href*="keterlambatan"]) .nav-link:hover {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .nav-section:has(.nav-link[href*="keterlambatan"]) .nav-link.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Pelanggaran Section */
+        .nav-section:has(.nav-link[href*="pelanggaran"]) .nav-section-title {
+            color: #ef4444;
+            border-bottom-color: rgba(239, 68, 68, 0.2);
+        }
+
+        .nav-section:has(.nav-link[href*="pelanggaran"]) .nav-link {
+            border: 1px solid transparent;
+        }
+
+        .nav-section:has(.nav-link[href*="pelanggaran"]) .nav-link:hover {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .nav-section:has(.nav-link[href*="pelanggaran"]) .nav-link.active {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Default Nav Links (untuk sections lainnya) */
+        .sidebar .nav-link:hover:not(.nav-section:has(.nav-link[href*="izin-keluar"]) .nav-link):not(.nav-section:has(.nav-link[href*="keterlambatan"]) .nav-link):not(.nav-section:has(.nav-link[href*="pelanggaran"]) .nav-link),
+        .sidebar .nav-link.active:not(.nav-section:has(.nav-link[href*="izin-keluar"]) .nav-link):not(.nav-section:has(.nav-link[href*="keterlambatan"]) .nav-link):not(.nav-section:has(.nav-link[href*="pelanggaran"]) .nav-link) {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            transform: translateX(5px);
             color: white;
+            border: 1px solid rgba(99, 102, 241, 0.3);
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
-        .sidebar .nav-link i {
-            width: 24px;
-            text-align: center;
-            margin-right: 0.75rem;
-            transition: transform 0.2s ease;
+        .sidebar .nav-link.active:not(.nav-section:has(.nav-link[href*="izin-keluar"]) .nav-link):not(.nav-section:has(.nav-link[href*="keterlambatan"]) .nav-link):not(.nav-section:has(.nav-link[href*="pelanggaran"]) .nav-link) {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            transform: translateX(3px);
         }
 
         .sidebar .nav-link:hover i {
             transform: scale(1.1);
         }
 
-        .sidebar .text-white-50 {
-            color: #94a3b8;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-size: 0.75rem;
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.1);
         }
 
-        main {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 1rem;
-            box-shadow: var(--card-shadow);
-            margin: 1rem;
-            margin-left: 300px;
-            min-height: calc(100vh - 60px);
+        .main-content {
+            flex: 1;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             overflow-y: auto;
-            transition: margin-left 0.3s ease;
-            will-change: margin-left;
+            transition: all 0.3s ease;
+            color: #1e293b;
+            position: relative;
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .content-wrapper {
+            padding: 1.25rem;
+            max-width: 100%;
         }
 
         .user-info {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 1rem;
-            margin: 1rem;
+            border-radius: 0.6rem;
+            padding: 0.8rem;
+            margin: 0.8rem;
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.2s ease;
         }
 
         .user-info:hover {
             background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
         .user-name {
             color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
         }
 
         .user-role {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.875rem;
+            font-size: 0.8rem;
         }
 
         .logout-btn {
             width: 100%;
-            background: rgba(220, 53, 69, 0.2);
-            border: 1px solid rgba(220, 53, 69, 0.3);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 53, 69, 0.2));
+            border: 1px solid rgba(239, 68, 68, 0.3);
             color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
-            margin-top: 1rem;
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 0;
             position: relative;
             overflow: hidden;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
         .logout-btn::before {
@@ -225,8 +476,10 @@
         }
 
         .logout-btn:hover {
-            background: rgba(220, 53, 69, 0.3);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 53, 69, 0.3));
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            border-color: rgba(239, 68, 68, 0.5);
         }
 
         .min-h-screen {
@@ -235,12 +488,34 @@
 
         /* Responsive Design - All Devices */
         @media (max-width: 768px) {
-            .sidebar-container {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
                 transform: translateX(-100%);
+                width: 280px;
+                max-width: 85vw;
+                height: 100vh;
+                z-index: 1050;
+                box-shadow: 4px 0 25px rgba(0, 0, 0, 0.25);
             }
 
-            .sidebar-container.show {
+            .sidebar.show {
                 transform: translateX(0);
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1045;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
             }
 
             .sidebar-overlay.show {
@@ -248,11 +523,30 @@
                 visibility: visible;
             }
 
-            main {
+            .main-content {
                 margin-left: 0;
-                border-radius: 0;
-                margin: 0;
             }
+
+            .content-wrapper {
+                padding: 1rem;
+            }
+
+            .sidebar-header {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .sidebar-user {
+                margin: 0.5rem;
+            }
+
+            .sidebar-nav {
+                padding: 0.75rem 0.5rem;
+            }
+        }
 
             .d-flex {
                 flex-direction: column;
@@ -262,11 +556,6 @@
                 height: 60px;
                 position: fixed;
                 z-index: 1040;
-            }
-
-            .sidebar {
-                width: 100%;
-                max-width: 280px;
             }
 
             .navbar-toggler {
@@ -286,94 +575,88 @@
         }
 
         @media (max-width: 992px) {
-            .sidebar-container {
-                width: 240px;
+            .sidebar {
+                width: 220px;
             }
-
-            main {
-                margin-left: 240px;
+            
+            .main-content {
+                margin-left: 220px;
+            }
+            
+            .sidebar-nav {
+                padding: 0.75rem;
+            }
+            
+            .sidebar .nav-link {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+            }
+            
+            .sidebar .nav-link i {
+                width: 18px;
+                font-size: 0.85rem;
+                margin-right: 0.6rem;
+            }
+            
+            .content-wrapper {
+                padding: 1rem;
             }
         }
 
         @media (min-width: 1200px) {
-            .sidebar-container {
-                width: 300px;
+            .sidebar {
+                width: 260px;
             }
-
-            main {
-                margin-left: 300px;
+            
+            .main-content {
+                margin-left: 260px;
             }
         }
 
         /* Tablet Specific */
         @media (min-width: 768px) and (max-width: 1024px) {
-            .sidebar-container {
-                width: 260px;
+            .sidebar {
+                width: 190px;
             }
-
-            main {
-                margin-left: 260px;
-            }
-
-            .sidebar .nav-link {
-                padding: 0.75rem 0.875rem;
+            
+            .sidebar-nav {
+                padding: 0.75rem 0.5rem;
             }
         }
 
         /* Large Desktop */
         @media (min-width: 1400px) {
-            .sidebar-container {
-                width: 320px;
+            .sidebar {
+                width: 280px;
             }
-
-            main {
-                margin-left: 320px;
-                max-width: calc(100vw - 320px);
+            
+            .main-content {
+                margin-left: 280px;
+            }
+            
+            .content-wrapper {
+                padding: 1.5rem;
             }
         }
 
         /* Ultra-wide screens */
         @media (min-width: 1920px) {
-            .sidebar-container {
-                width: 350px;
+            .sidebar {
+                width: 300px;
             }
-
-            main {
-                margin-left: 350px;
-                max-width: calc(100vw - 350px);
+            
+            .main-content {
+                margin-left: 300px;
+            }
+            
+            .content-wrapper {
+                max-width: 1800px;
+                margin: 0 auto;
+                padding: 2rem;
             }
         }
 
-        /* Navbar Section Inside Sidebar */
-        .navbar-section {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1040;
-        }
-
-        .brand {
-            color: white !important;
-        }
-
-        .brand h4 {
-            color: white !important;
-        }
-
-        .navbar-toggler {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
-            transition: all 0.2s ease;
-        }
-
-        .navbar-toggler:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.5);
-        }
+        /* Global Styles */
         * {
             box-sizing: border-box;
         }
@@ -392,116 +675,57 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Reduce motion for users who prefer it */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        .card {
-            border: none;
-            border-radius: 1rem;
-            box-shadow: var(--card-shadow);
-            background: rgba(255, 255, 255, 0.98);
-        }
-
-        .btn {
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border: none;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
-        }
-
+        /* Table Styles */
         .table {
             background: white;
             border-radius: 0.75rem;
             overflow: hidden;
+            color: #1e293b;
         }
 
-        .table thead {
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-        }
-
-        }
-        
-        .form-control {
-            border-radius: 0.5rem;
-            border: 1px solid #dee2e6;
-            padding: 0.75rem 1rem;
-        }
-        
-        .form-control:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
-        }
-        
-        .btn {
-            border-radius: 0.5rem;
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-        }
-        
-        .table-hover tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .list-group-item {
-            border: none;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .alert {
-            border: none;
-            border-radius: 0.5rem;
-            backdrop-filter: blur(10px);
-        }
-        
-        .btn-sm {
-            padding: 0.375rem 0.75rem;
-            font-size: 0.875rem;
-        }
-        
         .table th {
             font-weight: 600;
-            color: #374151;
-            border-bottom: 2px solid #e5e7eb;
+            color: #1e293b;
+            border-bottom: 2px solid #dee2e6;
         }
-        
+
         .table td {
             vertical-align: middle;
         }
-        
+
+        /* Card Header */
         .card-header h5 {
             font-size: 1rem;
             font-weight: 600;
         }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
+        /* Text Visibility */
+        h1, h2, h3, h4, h5, h6 {
+            color: #1e293b !important;
+        }
+        
+        .text-dark {
+            color: #1e293b !important;
+        }
+        
+        .card {
+            background: white !important;
+            color: #1e293b !important;
+        }
+        
+        .table {
+            color: #1e293b !important;
+        }
+        
+        .form-control {
+            color: #1e293b !important;
+            background-color: white !important;
+        }
+        
+        .form-label {
+            color: #1e293b !important;
+        }
+        
         /* WhatsApp Card Styles */
         .whatsapp-card {
             background: linear-gradient(135deg, #25d366, #128c7e);
@@ -582,112 +806,139 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body class="font-sans antialiased">
-    <div class="min-h-screen">
-        <!-- Integrated Sidebar with Navbar -->
-        <aside class="sidebar-container">
-            <div class="sidebar">
-                <!-- Navbar Section Inside Sidebar -->
-                <div class="navbar-section">
-                    <div class="d-flex align-items-center justify-content-between px-4 py-3">
-                        <!-- Mobile Menu Toggle -->
-                        <button class="navbar-toggler d-md-none" type="button" id="mobileMenuToggle">
-                            <i class="fas fa-bars text-white"></i>
-                        </button>
-                        
-                        <!-- Brand -->
-                        <div class="brand text-decoration-none d-flex align-items-center">
-                            <i class="fas fa-home me-2 text-white" style="font-size: 1.5rem;"></i>
-                            <h4 class="mb-0 text-white" style="font-weight: 700;">SELAMAT DATANG</h4>
+    <div class="app-container">
+        <!-- Main Layout Container -->
+        <div class="main-layout">
+            <!-- Sidebar dengan Navbar Terintegrasi -->
+            <aside class="sidebar">
+                <!-- Brand Section (Navbar) -->
+                <div class="sidebar-header">
+                    <div class="sidebar-brand">
+                        <img src="{{ asset('logo-dark.svg') }}" alt="Eduspace" style="height: 35px; width: auto;">
+                        <span class="brand-text">Eduspace</span>
+                    </div>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="navbar-toggler d-md-none" type="button" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                <!-- User Profile Section -->
+                <div class="sidebar-user">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ auth()->user()->name }}</div>
+                        <div class="user-role">
+                            @if(auth()->user()->role === 'admin')
+                                Administrator
+                            @elseif(auth()->user()->role === 'kepsek')
+                                Kepala Sekolah
+                            @else
+                                Guru Piket
+                            @endif
                         </div>
                     </div>
                 </div>
                 
-                <!-- User Info -->
-                <div class="user-info">
-                    <div class="user-name">
-                        <i class="fas fa-user-circle me-2"></i>{{ auth()->user()->name }}
-                    </div>
-                    <div class="user-role">
-                        @if(auth()->user()->role === 'admin')
-                            Administrator
-                        @elseif(auth()->user()->role === 'kepsek')
-                            Kepala Sekolah
-                        @else
-                            Guru Piket
-                        @endif
-                    </div>
-                </div>
-                
                 <!-- Navigation -->
-                <nav class="nav flex-column p-3">
+                <nav class="sidebar-nav">
                     <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="fas fa-chart-line"></i> Dashboard
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
                     </a>
                     
-                    <div class="mt-3 mb-2 text-white-50 small">DATA SISWA & GURU</div>
+                    @if(auth()->user()->role === 'admin')
+                    <div class="nav-section">
+                        <div class="nav-section-title">DATA SISWA & GURU</div>
+                        <a href="{{ route('siswa.index') }}" class="nav-link {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
+                            <i class="fas fa-users"></i>
+                            <span>Siswa</span>
+                        </a>
+                        <a href="{{ route('guru.index') }}" class="nav-link {{ request()->routeIs('guru.*') ? 'active' : '' }}">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Guru</span>
+                        </a>
+                    </div>
                     
-                    <a href="{{ route('siswa.index') }}" class="nav-link {{ request()->routeIs('siswa.*') ? 'active' : '' }}">
-                        <i class="fas fa-users"></i> Siswa
-                    </a>
+                    <div class="nav-section">
+                        <div class="nav-section-title">PELANGGARAN</div>
+                        <a href="{{ route('pelanggaran.index') }}" class="nav-link {{ request()->routeIs('pelanggaran.*') ? 'active' : '' }}">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Pelanggaran</span>
+                        </a>
+                        <a href="{{ route('pelanggaran.rekap') }}" class="nav-link {{ request()->routeIs('pelanggaran.rekap') ? 'active' : '' }}">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Rekap Pelanggaran</span>
+                        </a>
+                    </div>
+                    @endif
                     
-                    <a href="{{ route('guru.index') }}" class="nav-link {{ request()->routeIs('guru.*') ? 'active' : '' }}">
-                        <i class="fas fa-chalkboard-teacher"></i> Guru
-                    </a>
+                    @if(auth()->user()->role === 'guru')
+                    <div class="nav-section">
+                        <div class="nav-section-title">MANAJEMEN IZIN & KETERLAMBATAN</div>
+                        <a href="{{ route('izin-keluar.index') }}" class="nav-link {{ request()->routeIs('izin-keluar.*') ? 'active' : '' }}">
+                            <i class="fas fa-door-open"></i>
+                            <span>Izin Keluar</span>
+                        </a>
+                        <a href="{{ route('keterlambatan.index') }}" class="nav-link {{ request()->routeIs('keterlambatan.*') ? 'active' : '' }}">
+                            <i class="fas fa-clock"></i>
+                            <span>Keterlambatan</span>
+                        </a>
+                    </div>
                     
-                    <div class="mt-3 mb-2 text-white-50 small">JADWAL & PRESENSI</div>
+                    <div class="nav-section">
+                        <div class="nav-section-title">PELANGGARAN</div>
+                        <a href="{{ route('pelanggaran.index') }}" class="nav-link {{ request()->routeIs('pelanggaran.*') ? 'active' : '' }}">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Pelanggaran</span>
+                        </a>
+                        <a href="{{ route('pelanggaran.rekap') }}" class="nav-link {{ request()->routeIs('pelanggaran.rekap') ? 'active' : '' }}">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Rekap Pelanggaran</span>
+                        </a>
+                    </div>
+                    @endif
                     
-                    <a href="{{ route('piket.index') }}" class="nav-link {{ request()->routeIs('piket.*') ? 'active' : '' }}">
-                        <i class="fas fa-calendar-check"></i> Jadwal Piket
-                    </a>
+                    @if(auth()->user()->role === 'kepsek')
+                    <div class="nav-section">
+                        <div class="nav-section-title">LAPORAN & MONITORING</div>
+                        <a href="{{ route('pelanggaran.index') }}" class="nav-link {{ request()->routeIs('pelanggaran.*') ? 'active' : '' }}">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Pelanggaran</span>
+                        </a>
+                        <a href="{{ route('pelanggaran.rekap') }}" class="nav-link {{ request()->routeIs('pelanggaran.rekap') ? 'active' : '' }}">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Rekap Pelanggaran</span>
+                        </a>
+                    </div>
+                    @endif
                     
-                    <a href="{{ route('izin-keluar.index') }}" class="nav-link {{ request()->routeIs('izin-keluar.*') ? 'active' : '' }}">
-                        <i class="fas fa-door-open"></i> Izin Keluar
-                    </a>
-                    
-                    <a href="{{ route('keterlambatan.index') }}" class="nav-link {{ request()->routeIs('keterlambatan.*') ? 'active' : '' }}">
-                        <i class="fas fa-clock"></i> Keterlambatan
-                    </a>
-                    
-                    <div class="mt-3 mb-2 text-white-50 small">PELANGGARAN</div>
-                    
-                    <a href="{{ route('pelanggaran.index') }}" class="nav-link {{ request()->routeIs('pelanggaran.*') ? 'active' : '' }}">
-                        <i class="fas fa-exclamation-triangle"></i> Pelanggaran
-                    </a>
-                    
-                    <a href="{{ route('pelanggaran.rekap') }}" class="nav-link {{ request()->routeIs('pelanggaran.rekap') ? 'active' : '' }}">
-                        <i class="fas fa-chart-bar"></i> Rekap Pelanggaran
-                    </a>
-                    
-                    <div class="mt-3 mb-2 text-white-50 small">JADWAL</div>
-                    
-                    <a href="{{ route('jadwal-piket.index') }}" class="nav-link {{ request()->routeIs('jadwal-piket.*') ? 'active' : '' }}">
-                        <i class="fas fa-calendar-alt"></i> Jadwal Piket
-                    </a>
-                    
-                    <div class="mt-3 mb-2 text-white-50 small">TOOLS</div>
-                    
-                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'guru')
+                    @if(auth()->user()->role === 'guru')
                         <a href="#" onclick="openQRScanner()" class="nav-link">
-                            <i class="fas fa-qrcode"></i> QR Scanner
+                            <i class="fas fa-qrcode"></i>
+                            <span>QR Scanner</span>
                         </a>
                     @endif
                 </nav>
                 
                 <!-- Logout Button -->
-                <div class="p-3">
+                <div class="sidebar-footer">
                     <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Apakah Anda yakin ingin logout?')">
                         @csrf
                         <button type="submit" class="logout-btn">
-                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
                         </button>
                     </form>
                 </div>
-            </div>
-        </aside>
+            </aside>
 
             <!-- Main Content -->
-            <main class="flex-grow-1 fade-in">
-                <div class="container-fluid p-4">
+            <main class="main-content">
+                <div class="content-wrapper">
                     @if(session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}

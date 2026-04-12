@@ -3,9 +3,9 @@
 @section('content')
 <div class="py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 style="color: var(--primary-color);">Jadwal Piket Guru</h2>
+        <h2 style="color: #6366f1;">Jadwal Piket Guru</h2>
         @if(auth()->user()->role === 'admin')
-            <a href="{{ route('piket.create') }}" class="btn btn-primary">
+            <a href="{{ route('piket.create') }}" class="btn btn-primary" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: white;"
                 + Tambah Jadwal
             </a>
         @endif

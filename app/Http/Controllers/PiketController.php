@@ -12,7 +12,7 @@ class PiketController extends Controller
     public function index()
     {
         $piket = Piket::with('guru')->latest()->paginate(10);
-        return view('piket.index', compact('piket'));
+        return view('jadwal-piket.index', compact('piket'));
     }
 
     public function create()
@@ -80,5 +80,20 @@ class PiketController extends Controller
 
         return redirect()->route('piket.index')
             ->with('success', 'Jadwal piket berhasil dihapus.');
+    }
+
+    public function laporan()
+    {
+        if (auth()->user()->role !== 'kepsek') {
+            abort(403, 'Unauthorized access');
+        }
+        
+        $piket = Piket::with('guru')->latest()->paginate(15);
+        $totalPiket = Piket::count();
+        $piketBulanIni = Piket::whereMonth('tanggal', now()->month)
+            ->whereYear('tanggal', now()->year)
+            ->count();
+        
+        return view('laporan.piket', compact('piket', 'totalPiket', 'piketBulanIni'));
     }
 }

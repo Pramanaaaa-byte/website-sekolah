@@ -71,4 +71,22 @@ class IzinKeluarController extends Controller
         return redirect()->route('izin-keluar.index')
             ->with('success', 'Data izin keluar berhasil dihapus.');
     }
+
+    public function laporan()
+    {
+        if (auth()->user()->role !== 'kepsek') {
+            abort(403, 'Unauthorized access');
+        }
+        
+        $izin = IzinKeluar::with(['siswa', 'guru'])->latest()->paginate(15);
+        $totalIzin = IzinKeluar::count();
+        $izinBulanIni = IzinKeluar::whereMonth('waktu_keluar', now()->month)
+            ->whereYear('waktu_keluar', now()->year)
+            ->count();
+        $izinPerStatus = IzinKeluar::selectRaw('status, COUNT(*) as total')
+            ->groupBy('status')
+            ->get();
+        
+        return view('laporan.izin', compact('izin', 'totalIzin', 'izinBulanIni', 'izinPerStatus'));
+    }
 }
