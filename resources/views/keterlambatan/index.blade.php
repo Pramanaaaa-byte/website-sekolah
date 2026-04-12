@@ -57,12 +57,12 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             <div class="rounded-circle bg-white bg-opacity-20 p-3">
-                                <i class="fas fa-users"></i>
+                                <i class="fas fa-clock"></i>
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0 text-white-50">Total Siswa Terlambat</h6>
-                            <h3 class="mb-0">{{ $keterlambatan->count() }}</h3>
+                            <h6 class="mb-0 text-white-50">Total Keterlambatan</h6>
+                            <h3 class="mb-0">{{ $totalKeterlambatan ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>
@@ -74,29 +74,29 @@
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             <div class="rounded-circle bg-white bg-opacity-20 p-3">
-                                <i class="fas fa-chart-line"></i>
+                                <i class="fas fa-calendar-day"></i>
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0 text-white-50">Rata-rata Keterlambatan</h6>
-                            <h3 class="mb-0">{{ $keterlambatan->avg('durasi') ? number_format($keterlambatan->avg('durasi'), 1) : 0 }} menit</h3>
+                            <h6 class="mb-0 text-white-50">Hari Ini</h6>
+                            <h3 class="mb-0">{{ $keterlambatanHariIni ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #4facfe, #00f2fe); color: white;">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #fa709a, #fee140); color: white;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
                             <div class="rounded-circle bg-white bg-opacity-20 p-3">
-                                <i class="fas fa-exclamation-triangle"></i>
+                                <i class="fas fa-calendar-week"></i>
                             </div>
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0 text-white-50">Tertinggi Hari Ini</h6>
-                            <h3 class="mb-0">{{ $keterlambatan->max('durasi') ?? 0 }} menit</h3>
+                            <h6 class="mb-0 text-white-50">Minggu Ini</h6>
+                            <h3 class="mb-0">{{ $keterlambatanMingguIni ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-0 text-white-50">Bulan Ini</h6>
-                            <h3 class="mb-0">{{ $keterlambatan->whereMonth('created_at', now()->month)->count() }}</h3>
+                            <h3 class="mb-0">{{ $keterlambatanBulanIni ?? 0 }}</h3>
                         </div>
                     </div>
                 </div>

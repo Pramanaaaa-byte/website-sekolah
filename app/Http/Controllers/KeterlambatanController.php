@@ -13,7 +13,25 @@ class KeterlambatanController extends Controller
     public function index()
     {
         $keterlambatan = Keterlambatan::with(['siswa', 'guru'])->latest()->paginate(10);
-        return view('keterlambatan.index', compact('keterlambatan'));
+        
+        // Data untuk statistik
+        $totalKeterlambatan = Keterlambatan::count();
+        $keterlambatanHariIni = Keterlambatan::whereDate('waktu_datang', now()->format('Y-m-d'))->count();
+        $keterlambatanBulanIni = Keterlambatan::whereMonth('waktu_datang', now()->month)
+            ->whereYear('waktu_datang', now()->year)
+            ->count();
+        $keterlambatanMingguIni = Keterlambatan::whereBetween('waktu_datang', [
+            now()->startOfWeek()->format('Y-m-d'),
+            now()->endOfWeek()->format('Y-m-d')
+        ])->count();
+        
+        return view('keterlambatan.index', compact(
+            'keterlambatan', 
+            'totalKeterlambatan', 
+            'keterlambatanHariIni', 
+            'keterlambatanBulanIni', 
+            'keterlambatanMingguIni'
+        ));
     }
 
     public function create()
