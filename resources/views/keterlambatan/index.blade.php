@@ -22,11 +22,11 @@
     <!-- Stats Cards -->
     <div class="row mb-4">
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+            <div class="stats-card fade-in" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; animation-delay: 0.1s;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                            <div class="stats-icon">
                                 <i class="fas fa-clock"></i>
                             </div>
                         </div>
@@ -39,11 +39,11 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #f093fb, #f5576c); color: white;">
+            <div class="stats-card fade-in" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; animation-delay: 0.2s;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                            <div class="stats-icon">
                                 <i class="fas fa-calendar-day"></i>
                             </div>
                         </div>
@@ -56,11 +56,11 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #fa709a, #fee140); color: white;">
+            <div class="stats-card fade-in" style="background: linear-gradient(135deg, #fa709a, #fee140); color: white; animation-delay: 0.3s;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                            <div class="stats-icon">
                                 <i class="fas fa-calendar-week"></i>
                             </div>
                         </div>
@@ -73,11 +73,11 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm" style="border-radius: 15px; background: linear-gradient(135deg, #43e97b, #38f9d7); color: white;">
+            <div class="stats-card fade-in" style="background: linear-gradient(135deg, #43e97b, #38f9d7); color: white; animation-delay: 0.4s;">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                            <div class="rounded-circle bg-white bg-opacity-20 p-3">
+                            <div class="stats-icon">
                                 <i class="fas fa-calendar-check"></i>
                             </div>
                         </div>
@@ -85,20 +85,33 @@
                             <h6 class="mb-0 text-white-50">Bulan Ini</h6>
                             <h3 class="mb-0">{{ $keterlambatanBulanIni ?? 0 }}</h3>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title mb-3">
+                <i class="fas fa-filter me-2" style="color: var(--primary-color);"></i>
+                Filter Data
+            </h5>
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="input-group">
-                        <span class="input-group-text" style="border-radius: 10px 0 0 10px; background: #6366f1; color: white; border: none;">
+                        <span class="input-group-text">
                             <i class="fas fa-search"></i>
                         </span>
-                        <input type="text" class="form-control" id="searchInput" placeholder="Cari siswa, kelas, atau guru..." style="border-radius: 0 10px 10px 0; border-left: none; border-color: #e2e8f0;">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Cari siswa, kelas, atau guru..." style="border-left: none;">
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <input type="date" class="form-control" id="filterDate" style="border-radius: 10px; border-color: #e2e8f0;">
+                    <input type="date" class="form-control" id="filterDate" placeholder="Filter tanggal">
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()" style="border-radius: 10px; border-color: #e2e8f0;">
+                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()">
                         <i class="fas fa-redo me-2"></i>Reset Filter
                     </button>
                 </div>
@@ -107,10 +120,10 @@
     </div>
 
     <!-- Data Table -->
-    <div class="card" style="border-radius: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
-        <div class="card-header bg-white border-0 py-3" style="border-radius: 15px 15px 0 0;">
-            <h5 class="mb-0" style="color: #1e293b; font-weight: 600;">
-                <i class="fas fa-list me-2" style="color: #6366f1;"></i>
+    <div class="card fade-in">
+        <div class="card-header bg-white border-0 py-3">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2" style="color: var(--primary-color);"></i>
                 Daftar Keterlambatan Siswa
             </h5>
         </div>
@@ -119,25 +132,25 @@
                 <table class="table table-hover" id="keterlambatanTable">
                     <thead>
                         <tr>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-user me-2"></i>Siswa
                             </th>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-graduation-cap me-2"></i>Kelas
                             </th>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-chalkboard-teacher me-2"></i>Guru
                             </th>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-clock me-2"></i>Waktu Datang
                             </th>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-hourglass-half me-2"></i>Durasi
                             </th>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-comment me-2"></i>Keterangan
                             </th>
-                            <th style="border-bottom: 2px solid #e2e8f0; color: #64748b; font-weight: 600;">
+                            <th>
                                 <i class="fas fa-cogs me-2"></i>Aksi
                             </th>
                         </tr>
@@ -218,10 +231,16 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer bg-light border-0 py-3" style="border-radius: 0 0 15px 15px;">
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="card fade-in mt-3">
+        <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="text-muted">
+                        <i class="fas fa-info-circle me-2"></i>
                         Menampilkan {{ $keterlambatan->firstItem() ?? 0 }} - {{ $keterlambatan->lastItem() ?? 0 }} dari {{ $keterlambatan->total() }} data
                     </div>
                 </div>
@@ -233,89 +252,378 @@
             </div>
         </div>
     </div>
-    
-    <!-- Pagination -->
-            <div class="mt-3">
-                {{ $keterlambatan->links() }}
-            </div>
-        </div>
-    </div>
 </div>
 
 <style>
-.hover-row:hover {
-    background-color: rgba(99, 102, 241, 0.05) !important;
-    transform: scale(1.01);
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
-    transition: all 0.3s ease;
+/* CSS Variables for Consistent Design */
+:root {
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --info-color: #3b82f6;
+    --light-color: #f8fafc;
+    --dark-color: #1e293b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --radius-xl: 20px;
 }
 
-.avatar-sm {
-    width: 40px;
-    height: 40px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Base Styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    min-height: 100vh;
 }
 
-.form-control:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
-}
-
-.btn-outline-primary:hover {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-color: #6366f1;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-
-.btn-outline-danger:hover {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    border-color: #ef4444;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-}
-
+/* Card Styles */
 .card {
-    transition: all 0.3s ease;
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
 }
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-lg);
 }
 
-.badge {
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+/* Stats Cards */
+.stats-card {
+    border-radius: var(--radius-lg);
+    border: none;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
 }
 
-.table th {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    position: sticky;
+.stats-card::before {
+    content: '';
+    position: absolute;
     top: 0;
-    z-index: 10;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
 }
 
-.pagination .page-link {
-    color: #6366f1;
-    border: 1px solid #dee2e6;
-    margin: 0 2px;
-    border-radius: 8px;
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stats-card .card-body {
+    padding: 1.5rem;
+}
+
+.stats-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
 
+.stats-card:hover .stats-icon {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Table Styles */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background: linear-gradient(135deg, var(--light-color), #f1f5f9);
+    border: none;
+    color: var(--dark-color);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.hover-row {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.hover-row:hover {
+    background-color: rgba(99, 102, 241, 0.03) !important;
+    transform: scale(1.005);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+    z-index: 5;
+}
+
+.hover-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hover-row:hover::before {
+    opacity: 1;
+}
+
+/* Avatar Styles */
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.avatar-sm:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-xl);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+.btn {
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0.75rem 1.5rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-outline-danger {
+    border: 2px solid var(--danger-color);
+    color: var(--danger-color);
+    background: transparent;
+}
+
+.btn-outline-danger:hover {
+    background: linear-gradient(135deg, var(--danger-color), #dc2626);
+    border-color: var(--danger-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid var(--border-color);
+    color: #64748b;
+    background: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background: #64748b;
+    border-color: #64748b;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Form Styles */
+.form-control {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+    outline: none;
+}
+
+.form-select {
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+    outline: none;
+}
+
+.input-group-text {
+    border: none;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    background: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Pagination Styles */
+.pagination .page-link {
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    margin: 0 2px;
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
 .pagination .page-item.active .page-link {
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    border-color: #6366f1;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-color: var(--primary-color);
+    color: white;
 }
 
 .pagination .page-link:hover {
-    color: #8b5cf6;
+    color: var(--secondary-color);
     background-color: rgba(99, 102, 241, 0.1);
     transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+}
+
+/* Animation Classes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .stats-card .card-body {
+        padding: 1rem;
+    }
+    
+    .stats-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-responsive {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 0.25rem;
+        border-radius: var(--radius-md) !important;
+    }
 }
 </style>
 
