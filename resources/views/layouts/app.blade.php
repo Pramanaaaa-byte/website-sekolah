@@ -86,7 +86,8 @@
         .sidebar {
             background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
             width: 250px;
-            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -96,6 +97,8 @@
             top: 0;
             left: 0;
             z-index: 1050;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Sidebar Header (Navbar Integration) */
@@ -234,6 +237,26 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+        }
+
+        /* Custom scrollbar untuk sidebar */
+        .sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.5);
         }
 
         .nav-section {
@@ -397,6 +420,10 @@
             margin-top: auto;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             background: rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            backdrop-filter: blur(10px);
         }
 
         .main-content {
@@ -545,6 +572,8 @@
 
             .sidebar-nav {
                 padding: 0.75rem 0.5rem;
+                height: calc(100vh - 140px);
+                overflow-y: auto;
             }
         }
 
@@ -1010,7 +1039,7 @@
         });
 
         function setupMobileMenu() {
-            const sidebar = document.querySelector('.sidebar-container');
+            const sidebar = document.querySelector('.sidebar');
             const toggleBtn = document.getElementById('mobileMenuToggle');
             const overlay = document.createElement('div');
             overlay.className = 'sidebar-overlay';
