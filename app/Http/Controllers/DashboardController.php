@@ -50,8 +50,8 @@ class DashboardController extends Controller
             ->get();
         
         // Get today's activity data
-        $todayIzin = IzinKeluar::whereDate('tanggal', now()->format('Y-m-d'))->count();
-        $todayLate = Keterlambatan::whereDate('tanggal', now()->format('Y-m-d'))->count();
+        $todayIzin = IzinKeluar::whereDate('waktu_keluar', now()->format('Y-m-d'))->count();
+        $todayLate = Keterlambatan::whereDate('waktu_datang', now()->format('Y-m-d'))->count();
         $todayPiket = Piket::where('hari', now()->format('l'))->count();
         
         // Get role-based data
@@ -252,8 +252,10 @@ class DashboardController extends Controller
     private function getTodayAttendance()
     {
         $today = now()->format('Y-m-d');
-        $present = Keterlambatan::whereDate('tanggal', '<', $today)->where('status', 'hadir')->count();
-        $total = Siswa::count();
+        // Get students who are present today (not late)
+        $totalStudents = Siswa::count();
+        $lateStudents = Keterlambatan::whereDate('waktu_datang', $today)->count();
+        $present = $totalStudents - $lateStudents;
         
         return [
             'present' => $present,
@@ -269,13 +271,14 @@ class DashboardController extends Controller
     {
         $weekStart = now()->startOfWeek()->format('Y-m-d');
         $weekEnd = now()->endOfWeek()->format('Y-m-d');
-        $present = Keterlambatan::whereBetween('tanggal', [$weekStart, $weekEnd])->where('status', 'hadir')->count();
-        $total = Siswa::count();
+        $totalStudents = Siswa::count();
+        $lateStudents = Keterlambatan::whereBetween('waktu_datang', [$weekStart, $weekEnd])->count();
+        $present = $totalStudents - $lateStudents;
         
         return [
             'present' => $present,
-            'total' => $total,
-            'percentage' => $total > 0 ? round(($present / $total) * 100, 1) : 0
+            'total' => $totalStudents,
+            'percentage' => $totalStudents > 0 ? round(($present / $totalStudents) * 100, 1) : 0
         ];
     }
     
@@ -286,13 +289,14 @@ class DashboardController extends Controller
     {
         $monthStart = now()->startOfMonth()->format('Y-m-d');
         $monthEnd = now()->endOfMonth()->format('Y-m-d');
-        $present = Keterlambatan::whereBetween('tanggal', [$monthStart, $monthEnd])->where('status', 'hadir')->count();
-        $total = Siswa::count();
+        $totalStudents = Siswa::count();
+        $lateStudents = Keterlambatan::whereBetween('waktu_datang', [$monthStart, $monthEnd])->count();
+        $present = $totalStudents - $lateStudents;
         
         return [
             'present' => $present,
-            'total' => $total,
-            'percentage' => $total > 0 ? round(($present / $total) * 100, 1) : 0
+            'total' => $totalStudents,
+            'percentage' => $totalStudents > 0 ? round(($present / $totalStudents) * 100, 1) : 0
         ];
     }
     
