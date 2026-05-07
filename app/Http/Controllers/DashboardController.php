@@ -10,6 +10,7 @@ use App\Models\IzinKeluar;
 use App\Models\Keterlambatan;
 use App\Models\Pelanggaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -259,8 +260,8 @@ class DashboardController extends Controller
         
         return [
             'present' => $present,
-            'total' => $total,
-            'percentage' => $total > 0 ? round(($present / $total) * 100, 1) : 0
+            'total' => $totalStudents,
+            'percentage' => $totalStudents > 0 ? round(($present / $totalStudents) * 100, 1) : 0
         ];
     }
     

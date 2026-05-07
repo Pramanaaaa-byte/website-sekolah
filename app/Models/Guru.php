@@ -16,10 +16,20 @@ class Guru extends Model
     
     protected $fillable = [
         'nama',
-        'nik',
+        'nip',
         'jabatan',
         'jenis_kelamin'
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'id_guru';
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('id_guru', $value)->firstOrFail();
+    }
 
     public function piket(): HasMany
     {
